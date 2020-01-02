@@ -97,7 +97,7 @@ class SogouImageSpider():
         self.close_mongodb()
 
 '''
-启动运行
+使用多进程启动运行
 '''
 if __name__ == '__main__':
     max_page = 2
