@@ -8,17 +8,18 @@ from multiprocessing.pool import Pool
 
 class SogouImageSpider():
     '''
-    初始化实例
+    初始化
     '''
     def __init__(self, keyword, mongo_uri, mongo_db, mongo_collection):
         self.keyword = keyword
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
         self.mongo_collection = mongo_collection
-
+        self.client = pymongo.MongoClient(self.mongo_uri)
+        self.db = self.client[self.mongo_db]
 
     '''
-    获取Ajax的数据
+    获取Ajax加载的数据
     '''
     def get_data(self, start):
         try:
@@ -42,7 +43,7 @@ class SogouImageSpider():
             return None
 
     '''
-    提取Ajax数据，分别是title和image
+    提取Ajax加载的数据，分别是title和image
     '''
     def parse_json(self, json):
         items = json.get('items')
@@ -58,9 +59,7 @@ class SogouImageSpider():
     保存到mongoDB
     '''
     def save_to_mongodb(self, content):
-        self.client = pymongo.MongoClient(self.mongo_uri)
-        db = self.client[self.mongo_db]
-        db[self.mongo_collection].insert(dict(content))
+        self.db[self.mongo_collection].insert(dict(content))
 
     '''
     关闭mongoDB
