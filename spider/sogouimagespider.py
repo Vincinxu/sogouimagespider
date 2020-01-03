@@ -15,8 +15,7 @@ class SogouImageSpider():
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
         self.mongo_collection = mongo_collection
-        self.client = pymongo.MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
+        
 
     '''
     获取Ajax加载的数据
@@ -59,7 +58,9 @@ class SogouImageSpider():
     保存到mongoDB
     '''
     def save_to_mongodb(self, content):
-        self.db[self.mongo_collection].insert(dict(content))
+        self.client = pymongo.MongoClient(self.mongo_uri)
+        db = self.client[self.mongo_db]
+        db[self.mongo_collection].insert(dict(content))
 
     '''
     关闭mongoDB
